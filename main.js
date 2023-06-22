@@ -199,15 +199,6 @@ function cloneState(state) {
     return newState;
 }
 
-function sgrid() {
-    for (i in grid) {
-        state[i] = []; // Initialize the inner array
-        for (j in grid[i]) {
-            state[i][j] = grid[i][j].innerHTML;
-        }
-    }
-}
-
 function terminal(state) {
     // Is the Game over? And if so how Won or is it a Tie. (returns -1 0 or 1)
     let isgameover = checkTie(state).Value;
