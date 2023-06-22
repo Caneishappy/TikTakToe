@@ -1,0 +1,24 @@
+
+.grid-container {
+  display: grid;
+  grid-template-areas:
+    '1 1 1'
+    '2 2 2'
+    '3 3 3';
+  gap: 15px;
+  background-color: #2196F3;
+  padding: 10px;
+  justify-content:center;
+}
+
+.grid-container > div {
+  background-color: #ffffff;
+  text-align: center;
+  height: 50px;
+  width: 50px;
+}
+
+.Gameover-screen{
+  display:none;
+  position: absolute;
+}
