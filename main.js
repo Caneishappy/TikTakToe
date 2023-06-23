@@ -282,11 +282,11 @@ function minimax(s, move) {
             Value: newval,
         };
     }
-    if (player(s) == "min") {
-        newval = Infinity; // so if first Value that is find is lower.
+    if (player(s) == "min") { // min is the O player and wants to minimize the value
+        newval = Infinity; // so if first Value that is found is lower.
         for (a of getActions(s)) {
             //for every possibe move
-            newval = minimax(getNewState(s, a, "O"), a).Value;
+            comparval = minimax(getNewState(s, a, "O"), a).Value;
             if (newval > comparval) {
                 newval = comparval;
                 action = a;
