@@ -63,7 +63,7 @@ function resetgrid() {
             meinDiv.innerHTML = ``;
         }
     }
-    sgrid();
+    resetState();
     gameover = false;
     circle = false;
     console.log(`Reset`);
@@ -118,12 +118,21 @@ function resultnoai(grid) {
     }
     return false;
 }
+
 //For the Algorithen to calculate the best Move:
+function resetState() {
+    for (i in grid) {
+        state[i] = []; // Initialize the inner array
+        for (j in grid[i]) {
+            state[i][j] = "";
+        }
+    }
+}
 function checkTie(state) {
     for (i in state) {
         for (j in state) {
             if (state[i][j] == "") {
-                return state;
+                return false;
             }
         }
     }
@@ -152,16 +161,23 @@ function result(grid) {
         }
     } //diagonal
     if (
-        (grid[0][0] === grid[1][1] &&
-            grid[0][0] === grid[2][2] &&
-            grid[0][0] !== "") ||
-        (grid[0][2] === grid[1][1] &&
-            grid[1][1] === grid[2][0] &&
-            grid[1][1] !== "")
+        grid[0][0] === grid[1][1] &&
+        grid[0][0] === grid[2][2] &&
+        grid[0][0] !== ""
     ) {
         return {
             Value: true,
             Winner: grid[0][0],
+        };
+    }
+    if (
+        grid[0][2] === grid[1][1] &&
+        grid[1][1] === grid[2][0] &&
+        grid[1][1] !== ""
+    ) {
+        return {
+            Value: true,
+            Winner: grid[0][2],
         };
     }
     return {
