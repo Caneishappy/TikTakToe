@@ -5,22 +5,18 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>TicTacToe</title>
-        <link rel="stylesheet" href="./style.css">
+        <link rel="stylesheet" href="./style.css" />
     </head>
-    <body>
+    <body >
         <div class="Gameover-screen" id="Gameover-screen">Gameover</div>
-        <div class="grid-container" id="grid-container">
-            <div id="item0" class="grid-item0"></div>
-            <div id="item1" class="grid-item1"></div>
-            <div id="item2" class="grid-item2"></div>
-            <div id="item3" class="grid-item3"></div>
-            <div id="item4" class="grid-item4"></div>
-            <div id="item5" class="grid-item5"></div>
-            <div id="item6" class="grid-item6"></div>
-            <div id="item7" class="grid-item7"></div>
-            <div id="item8" class="grid-item8"></div>
-        </div>
-        <button type="button" onclick="resetgrid()">Reset</button>
+        <div class="grid-container" id="grid-container"></div>
+        <button type="button" onclick="resetGrid()">Reset</button>
+        <button type="button" onclick="doAiMove(state)">
+            AiMove
+        </button>
+        <button type="button" onclick="enableAi()">AiOn</button>
+        <button type="button" onclick="">-1</button>
+        <button type="button" onclick="">+1</button>
         <script src="./main.js"></script>
     </body>
 </html>
