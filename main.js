@@ -142,6 +142,9 @@ function minimax(state) {
                     //Getting the best value. -1 Means O won; 0 mean draw; 1 means X won.
                     value = newValue;
                     valueAction = action;
+                    if(value == 1){
+                        break //If a Winning move is found, stop serching.
+                    }
                 }
             }
             return [value, valueAction];
@@ -153,6 +156,9 @@ function minimax(state) {
                 if (newValue < value) {
                     value = newValue;
                     valueAction = action;
+                    if(value == -1){
+                        break //If a winning move is found, stop serching.
+                    }
                 }
             }
             return [value, valueAction];
