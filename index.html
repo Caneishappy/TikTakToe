@@ -7,16 +7,19 @@
         <title>TicTacToe</title>
         <link rel="stylesheet" href="./style.css" />
     </head>
-    <body >
+    <body>
         <div class="Gameover-screen" id="Gameover-screen">Gameover</div>
         <div class="grid-container" id="grid-container"></div>
-        <button type="button" onclick="resetGrid()">Reset</button>
-        <button type="button" onclick="doAiMove(state)">
-            AiMove
-        </button>
-        <button type="button" onclick="enableAi()">AiOn</button>
-        <button type="button" onclick="">-1</button>
-        <button type="button" onclick="">+1</button>
+        <div class="button-container">
+            <button type="button" onclick="resetGrid()">Reset</button>
+            <button type="button" onclick="doAiMove(state)">AiMove</button>
+            <button type="button" id="aionoff" onclick="enableAi()">
+                AI On
+            </button>
+            <p>Boardsize:</p>
+            <button type="button" onclick="initGrid(boardsize -1)">-1</button>
+            <button type="button" onclick="initGrid(boardsize +1)">+1</button>
+        </div>
         <script src="./main.js"></script>
     </body>
 </html>

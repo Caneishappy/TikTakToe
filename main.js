@@ -1,5 +1,4 @@
 const elFake = document.createElement("div");
-
 const elGameOver = document.getElementById("Gameover-screen") ?? elFake;
 const elBG = document.getElementById("grid-container") ?? elFake;
 let getSquare = undefined;
@@ -11,14 +10,17 @@ let boardsize = 3;
 
 const grid = [];
 let state = [
-    // ["", "", ""],
-    // ["", "", ""],
-    // ["", "", ""],
+    // [0, 0, 0],
+    // [0, 0, 0],
+    // [0, 0, 0],
 ];
 
 function enableAi() {
     aiEnabled ? console.log("Ai is not off") : console.log("Ai is now on.");
     aiEnabled = !aiEnabled;
+    aiEnabled
+        ? (document.getElementById("aionoff").innerText = "AI On")
+        : (document.getElementById("aionoff").innerText = "AI Off");
 }
 
 function initGrid(size) {
@@ -51,7 +53,7 @@ function initGrid(size) {
         state.push([]);
         for (let j = 0; j < size; j++) {
             const [row, col] = [i, j];
-            state[row].push("");
+            state[row].push(0);
             if (!grid[row][col]) {
                 //crate the div element with the right id & add it the the grid
                 const newItem = document.createElement("div");
@@ -71,7 +73,8 @@ function initGrid(size) {
                 //set the selected square and if on let the alg. make a move
                 setSquare(row, col);
                 if (!gameover && aiEnabled) {
-                    setSquare(...aiMove(state));
+                    doAiMove(state);
+                    // setSquare(...aiMove(state));
                 }
             });
         }
@@ -79,11 +82,12 @@ function initGrid(size) {
 }
 
 function resetGrid() {
+    // not workling??!!
     console.log(aiEnabled);
     for (let i = 0; i < boardsize; i++) {
         for (let j = 0; j < boardsize; j++) {
             grid[i][j].innerHTML = "";
-            state[i][j] = "";
+            state[i][j] = 0;
         }
     }
     circle = false;
@@ -95,11 +99,12 @@ function resetGrid() {
 }
 
 function setSquare(row, col) {
-    const playerSymbol = circle ? "O" : "X";
-    circle = !circle;
-
-    grid[row][col].innerHTML = playerSymbol;
-    state[row][col] = playerSymbol;
+    if (getPlayer(state) == 1) {
+        grid[row][col].innerHTML = "X";
+    } else {
+        grid[row][col].innerHTML = "O";
+    }
+    state[row][col] = getPlayer(state);
     checkGameOver();
 }
 
@@ -129,21 +134,22 @@ function minimax(state) {
     //recursive
     const condition = getCondition(state);
     if (condition !== undefined) {
-        // condition == undefined would mean that the game is ongoing.
+        // condition == undefined would mean that the game is ongoing
         return [condition, undefined];
     } else {
-        if (getPlayer(state) === "X") {
-            let value = -2; //So every situation is better
+        if (getPlayer(state) === 1) {
+            let value = -Infinity; //So every situation is better
             let valueAction = undefined;
             for (const action of getAvailableActions(state)) {
                 //For every possible move:
                 const [newValue] = minimax(getNewState(state, action));
                 if (newValue > value) {
                     //Getting the best value. -1 Means O won; 0 mean draw; 1 means X won.
-                    value = newValue;
                     valueAction = action;
-                    if(value == 1){
-                        break //If a Winning move is found, stop serching.
+                    value = newValue;
+                    if (value >= 1) {
+                        //If a winning move is found, stop searching
+                        break;
                     }
                 }
             }
@@ -156,8 +162,8 @@ function minimax(state) {
                 if (newValue < value) {
                     value = newValue;
                     valueAction = action;
-                    if(value == -1){
-                        break //If a winning move is found, stop serching.
+                    if (value <= -1) {
+                        break;
                     }
                 }
             }
@@ -166,78 +172,43 @@ function minimax(state) {
     }
 }
 
-let LengthToWin = boardsize; //might change later on, so it is a own variable
-
 function getCondition(state) {
+    let lengthToWin = boardsize; //might change later on, so it is an own variable
     for (let i = 0; i <= 1; i++) {
         // Twice for switching row and col
-        let highestcount = 0;
-        for (let k in state) {
-            let oldsymbole = "";
-            let count = 0;
+        for (let k = 0; k < state.length; k++) {
+            let total = 0;
             const [row, col] = i === 0 ? [0, k] : [k, 0]; // Switch the label of row and col for horizontal/vertical win.
 
-            for (let j in state[row]) {
+            for (let j = 0; j < state[row].length; j++) {
                 const [currRow, currCol] = i === 0 ? [j, k] : [k, j]; // Switch the label of row and col for horizontal/vertical win.
-                const currentSymbol = state[currRow][currCol];
-
-                if (currentSymbol !== "") {
-                    if (currentSymbol === oldsymbole) {
-                        count++;
-                    } else {
-                        count = 1; // Start counting from 1 for the current symbol.
-                        oldsymbole = currentSymbol;
-                    }
-
-                    highestcount = Math.max(count, highestcount);
-
-                    if (highestcount >= LengthToWin) {
-                        return oldsymbole === "X" ? 1 : -1;
-                    }
-                } else {
-                    count = 0;
-                    oldsymbole = "";
-                }
+                total += state[currRow][currCol];
+            }
+            if (Math.abs(total) >= lengthToWin) {
+                return total / lengthToWin;
             }
 
-            //Diagonal
-            count = 0; //Reseting the count to 0
-            if (row >= LengthToWin - 1 || col >= LengthToWin - 1) {
+            if (row >= lengthToWin - 1 || col >= lengthToWin - 1) {
+                //Diagonal
                 i === 0 ? (j = Math.max(row, col)) : (j = 0);
+                total = 0; //Reseting the total to 0
 
                 for (let n = 0; n <= Math.max(row, col); n++) {
                     //For the length of the Diagonal (the diagonal has the same lenth as the row/col that it starts/stops on).
                     const [currRow, currCol] = i === 0 ? [j, n] : [n, j];
-
-                    const currentSymbol = state[currRow][currCol];
-
-                    if (currentSymbol !== "") {
-                        if (currentSymbol === oldsymbole) {
-                            count++;
-                        } else {
-                            count = 1; // Start counting from 1 for the current symbol
-                            oldsymbole = currentSymbol;
-                        }
-
-                        highestcount = Math.max(count, highestcount);
-
-                        if (highestcount >= LengthToWin) {
-                            return oldsymbole === "X" ? 1 : -1;
-                        }
-                    } else {
-                        count = 0;
-                        oldsymbole = "";
-                    }
+                    total += state[currRow][currCol];
                     i === 0 ? j-- : j++;
+                }
+                if (Math.abs(total) >= lengthToWin) {
+                    return total / lengthToWin;
                 }
             }
         }
     }
-
-    //If no win is found, check if it is a draw or the game is ongoing.
     for (const i in state) {
         for (const j in state) {
-            if (state[i][j] === "") {
+            if (state[i][j] === 0) {
+                //if there is an empty square: ongoing
                 return undefined;
             }
         }
@@ -247,28 +218,29 @@ function getCondition(state) {
 }
 
 function getPlayer(state) {
+    //20% of Performance
     let actions = 0;
     //If the available amount of squars is even, then 'O' has to make a move.
     for (const i in state) {
         for (const j in state[i]) {
-            if (state[i][j] !== "") {
+            if (state[i][j] !== 0) {
                 actions++;
             }
         }
     }
-
+    // return ((actions % 2 === 0)? "X" : "O");
     function isEven(x) {
         return x % 2 === 0;
     }
 
-    return isEven(actions) ? "X" : "O";
+    return isEven(actions) ? 1 : -1;
 }
 
 function getAvailableActions(state) {
     const actions = [];
     for (const i in state) {
         for (const j in state[i]) {
-            if (state[i][j] === "") {
+            if (state[i][j] === 0) {
                 //Add every empty square to the list.
                 actions.push([i, j]);
             }
@@ -285,8 +257,20 @@ function getNewState(state, action) {
     return newState;
 }
 function doAiMove(state) {
+    if (!gameover) {
+        console.time();
+        // try {
+        setSquare(...aiMove(state));
+        // } catch {
+        // console.error("Something went wrong. Might be that the game is over.");
+        // }
+        console.timeEnd();
+    }
+}
+
+function testtimer() {
     console.time();
-    setSquare(...aiMove(state));
+    getCondition(state);
     console.timeEnd();
 }
 initGrid(boardsize);
