@@ -21,6 +21,10 @@ body{
     width: 6rem;
 }
 
+grid-container > div >{
+    padding-top: 50%;
+}
+
 .button-container {
     text-align: center;
     padding: 5%;
