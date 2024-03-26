@@ -2,7 +2,7 @@ const elFake = document.createElement("div");
 const elGameOver = document.getElementById("Gameover-screen") ?? elFake;
 const elBG = document.getElementById("grid-container") ?? elFake;
 const xIcon = './sources/X.svg'
-const oIcon = './sources/O.svg'
+let oIcon = './sources/O.svg'
 let getSquare = undefined;
 
 let circle = false;
@@ -286,3 +286,24 @@ function testtimer() {
     console.timeEnd();
 }
 initGrid(boardsize);
+
+
+
+const konamiCode = ['ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'ArrowLeft', 'ArrowRight', 'b', 'a'];
+
+
+let userInput = [];
+
+
+document.addEventListener('keydown', (event) => {
+    const key = event.key;
+    userInput.push(key);
+    for(let input; input < userInput.length;input ++){
+        if(userInput[input] != konamiCode[input]){
+            userInput = []
+        }
+    }
+    if(userInput.length == konamiCode.length){
+        oIcon = './sources/orange.webp'
+    }
+});
