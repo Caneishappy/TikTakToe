@@ -1,7 +1,11 @@
-body{
+body {
     font-family: "Roboto", sans-serif;
 }
-
+div,p,h1,* {
+    font-family: "Roboto", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+}
 .grid-container {
     display: grid;
     grid-template-areas:
@@ -15,14 +19,22 @@ body{
 }
 
 .grid-container > div {
+    /* display: grid; */
     background-color: #ffffff;
-    text-align: center;
     height: 6rem;
     width: 6rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    /* justify-content: center;
+    align-items: center; */
+
 }
 
-grid-container > div >{
-    padding-top: 50%;
+.grid-container > div > img{
+    display: block;
+    margin: 0 auto;
+    height: 75%;
 }
 
 .button-container {
@@ -30,15 +42,15 @@ grid-container > div >{
     padding: 5%;
     align-items: center;
 }
-.button-container > *{
+.button-container > * {
     font-size: 2rem;
     font-weight: bold;
     padding: 0.5rem;
     display: inline;
 }
 
-.button-container > p{
-    padding-left: 3rem;
+.button-container > p {
+    text-align: center;
 }
 
 .Gameover-screen {

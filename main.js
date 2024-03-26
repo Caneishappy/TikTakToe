@@ -24,7 +24,13 @@ function enableAi() {
 }
 
 function initGrid(size) {
+    //Reset the game conditions and Displaying
+    circle = false;
+    gameover = false;
+    elGameOver.style.display = "none";
+    elBG.style.background = "#2196F3";
     boardsize = size;
+
     //Delete content of the board, grid & state
     while (elBG.firstChild) {
         elBG.removeChild(elBG.firstChild);
@@ -82,8 +88,6 @@ function initGrid(size) {
 }
 
 function resetGrid() {
-    // not workling??!!
-    console.log(aiEnabled);
     for (let i = 0; i < boardsize; i++) {
         for (let j = 0; j < boardsize; j++) {
             grid[i][j].innerHTML = "";
@@ -92,35 +96,41 @@ function resetGrid() {
     }
     circle = false;
     gameover = false;
-
-    console.log("Reset");
     elGameOver.style.display = "none";
     elBG.style.background = "#2196F3";
 }
 
 function setSquare(row, col) {
     if (getPlayer(state) == 1) {
-        grid[row][col].innerHTML = "X";
+        grid[row][col].innerHTML = `<img src="./sources/X.svg">`;
     } else {
-        grid[row][col].innerHTML = "O";
+        grid[row][col].innerHTML = `<img src="./sources/O.svg">`;
     }
     state[row][col] = getPlayer(state);
     checkGameOver();
 }
 
+
 function checkGameOver() {
     const condition = getCondition(state);
 
-    if (condition !== undefined) {
+    if (condition !== undefined) { // if the game is not over
         gameover = true;
         if (condition === 0) {
+            elGameOver.innerHTML = `<p>Gameover!  <br><span style="font-weight:bold;font-size: 2.5rem;">Draw</span></p>`
             console.log("Game over! Draw");
             elGameOver.style.display = "block";
             elBG.style.background = "#ff6500";
-        } else {
+        } else{
             console.log("Game over!");
             elGameOver.style.display = "block";
             elBG.style.background = "red";
+            if (condition == 1){ // If X won:
+                elGameOver.innerHTML = `<p>Gameover! <br> <span style="font-weight:bold;">Winner:</span></p> <img src='./sources/xIcon.png' style='width: 30%'>`;
+            }
+            else{ // O won:
+                elGameOver.innerHTML = `<p>Gameover! <br> <span style="font-weight:bold;">Winner:</span></p> <img src='./sources/OIcon.png' style='width: 30%'>`;
+            }
         }
     }
 }
