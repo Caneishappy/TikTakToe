@@ -31,7 +31,7 @@ function initGrid(size) {
     gameover = false;
     elGameOver.style.display = "none";
     elBG.style.background = "#2196F3";
-    boardsize = size;
+    boardsize = size; // I think this is useless?
 
     //Delete content of the board, grid & state
     while (elBG.firstChild) {
@@ -45,7 +45,7 @@ function initGrid(size) {
         grid.splice(i, 1);
     }
 
-    //Display the div elements in a quare
+    //Display the div elements in a square
     csssize = "'";
     for (let n = 1; n < size + 1; n++) {
         for (let b = 0; b < size; b++) {
@@ -71,16 +71,12 @@ function initGrid(size) {
             }
             grid[row][col].addEventListener("click", function () {
                 //add the logic to the square
-                getSquare = `${"item" + [row * size + col]}`;
-                if (state[row][col] !== 0 || gameover) {
-                    return;
-                }
-                else{
+                if (!state[row][col] !== 0 || !gameover) {         
                     //set the selected square and if on let the alg. make a move
                     setSquare(row, col);
                     if (!gameover && aiEnabled) {
-                        doAiMove(state);
-                        // setSquare(...aiMove(state));
+                        doAiMove(state); // This logs the time it took aswell
+                        // setSquare(...aiMove(state)); 
                     }
                 }
             });
@@ -294,19 +290,23 @@ const konamiCode = [
     "ArrowRight",
     "b",
     "a",
+    "Enter",
 ];
 
 let userInput = [];
 
 document.addEventListener("keydown", (event) => {
+    
     const key = event.key;
     userInput.push(key);
-    for (let input; input < userInput.length; input++) {
+    for (let input = 0; input < userInput.length; input++) {
         if (userInput[input] != konamiCode[input]) {
             userInput = [];
+            return
         }
     }
     if (userInput.length == konamiCode.length) {
+        console.log("Konami Code entered successfully! Enjoy")
         oIcon = "./sources/orange.webp";
     }
 });
