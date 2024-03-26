@@ -1,6 +1,8 @@
 const elFake = document.createElement("div");
 const elGameOver = document.getElementById("Gameover-screen") ?? elFake;
 const elBG = document.getElementById("grid-container") ?? elFake;
+const xIcon = './sources/X.svg'
+const oIcon = './sources/O.svg'
 let getSquare = undefined;
 
 let circle = false;
@@ -102,9 +104,9 @@ function resetGrid() {
 
 function setSquare(row, col) {
     if (getPlayer(state) == 1) {
-        grid[row][col].innerHTML = `<img src="./sources/X.svg">`;
+        grid[row][col].innerHTML = `<img src="${xIcon}" >`;
     } else {
-        grid[row][col].innerHTML = `<img src="./sources/O.svg">`;
+        grid[row][col].innerHTML = `<img src="${oIcon}" >`;
     }
     state[row][col] = getPlayer(state);
     checkGameOver();
@@ -126,10 +128,10 @@ function checkGameOver() {
             elGameOver.style.display = "block";
             elBG.style.background = "red";
             if (condition == 1){ // If X won:
-                elGameOver.innerHTML = `<p>Gameover! <br> <span style="font-weight:bold;">Winner:</span></p> <img src='./sources/xIcon.png' style='width: 30%'>`;
+                elGameOver.innerHTML = `<p>Gameover! <br> <span style="font-weight:bold;">Winner:</span></p><img src="${xIcon}" style='width: 30%'>`;
             }
             else{ // O won:
-                elGameOver.innerHTML = `<p>Gameover! <br> <span style="font-weight:bold;">Winner:</span></p> <img src='./sources/OIcon.png' style='width: 30%'>`;
+                elGameOver.innerHTML = `<p>Gameover! <br> <span style="font-weight:bold;">Winner:</span></p> <img="${oIcon}" style='width: 30%'>`;
             }
         }
     }
