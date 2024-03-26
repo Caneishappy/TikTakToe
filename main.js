@@ -131,7 +131,7 @@ function checkGameOver() {
                 elGameOver.innerHTML = `<p>Gameover! <br> <span style="font-weight:bold;">Winner:</span></p><img src="${xIcon}" style='width: 30%'>`;
             }
             else{ // O won:
-                elGameOver.innerHTML = `<p>Gameover! <br> <span style="font-weight:bold;">Winner:</span></p> <img="${oIcon}" style='width: 30%'>`;
+                elGameOver.innerHTML = `<p>Gameover! <br> <span style="font-weight:bold;">Winner:</span></p><img src="${oIcon}" style='width: 30%'>`;
             }
         }
     }
