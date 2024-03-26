@@ -1,8 +1,8 @@
 const elFake = document.createElement("div");
 const elGameOver = document.getElementById("Gameover-screen") ?? elFake;
 const elBG = document.getElementById("grid-container") ?? elFake;
-const xIcon = './sources/X.svg'
-let oIcon = './sources/O.svg'
+const xIcon = "./sources/X.svg";
+let oIcon = "./sources/O.svg";
 let getSquare = undefined;
 
 let circle = false;
@@ -72,17 +72,16 @@ function initGrid(size) {
             grid[row][col].addEventListener("click", function () {
                 //add the logic to the square
                 getSquare = `${"item" + [row * size + col]}`;
-                if (
-                    document.getElementById(getSquare).textContent !== "" ||
-                    gameover
-                ) {
+                if (state[row][col] !== 0 || gameover) {
                     return;
                 }
-                //set the selected square and if on let the alg. make a move
-                setSquare(row, col);
-                if (!gameover && aiEnabled) {
-                    doAiMove(state);
-                    // setSquare(...aiMove(state));
+                else{
+                    //set the selected square and if on let the alg. make a move
+                    setSquare(row, col);
+                    if (!gameover && aiEnabled) {
+                        doAiMove(state);
+                        // setSquare(...aiMove(state));
+                    }
                 }
             });
         }
@@ -112,25 +111,26 @@ function setSquare(row, col) {
     checkGameOver();
 }
 
-
 function checkGameOver() {
     const condition = getCondition(state);
 
-    if (condition !== undefined) { // if the game is not over
+    if (condition !== undefined) {
+        // if the game is not over
         gameover = true;
         if (condition === 0) {
-            elGameOver.innerHTML = `<p>Gameover!  <br><span style="font-weight:bold;font-size: 2.5rem;">Draw</span></p>`
+            elGameOver.innerHTML = `<p>Gameover!  <br><span style="font-weight:bold;font-size: 2.5rem;">Draw</span></p>`;
             console.log("Game over! Draw");
             elGameOver.style.display = "block";
             elBG.style.background = "#ff6500";
-        } else{
+        } else {
             console.log("Game over!");
             elGameOver.style.display = "block";
             elBG.style.background = "red";
-            if (condition == 1){ // If X won:
+            if (condition == 1) {
+                // If X won:
                 elGameOver.innerHTML = `<p>Gameover! <br> <span style="font-weight:bold;">Winner:</span></p><img src="${xIcon}" style='width: 30%'>`;
-            }
-            else{ // O won:
+            } else {
+                // O won:
                 elGameOver.innerHTML = `<p>Gameover! <br> <span style="font-weight:bold;">Winner:</span></p><img src="${oIcon}" style='width: 30%'>`;
             }
         }
@@ -271,11 +271,7 @@ function getNewState(state, action) {
 function doAiMove(state) {
     if (!gameover) {
         console.time();
-        // try {
         setSquare(...aiMove(state));
-        // } catch {
-        // console.error("Something went wrong. Might be that the game is over.");
-        // }
         console.timeEnd();
     }
 }
@@ -287,23 +283,30 @@ function testtimer() {
 }
 initGrid(boardsize);
 
-
-
-const konamiCode = ['ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'ArrowLeft', 'ArrowRight', 'b', 'a'];
-
+const konamiCode = [
+    "ArrowUp",
+    "ArrowUp",
+    "ArrowDown",
+    "ArrowDown",
+    "ArrowLeft",
+    "ArrowRight",
+    "ArrowLeft",
+    "ArrowRight",
+    "b",
+    "a",
+];
 
 let userInput = [];
 
-
-document.addEventListener('keydown', (event) => {
+document.addEventListener("keydown", (event) => {
     const key = event.key;
     userInput.push(key);
-    for(let input; input < userInput.length;input ++){
-        if(userInput[input] != konamiCode[input]){
-            userInput = []
+    for (let input; input < userInput.length; input++) {
+        if (userInput[input] != konamiCode[input]) {
+            userInput = [];
         }
     }
-    if(userInput.length == konamiCode.length){
-        oIcon = './sources/orange.webp'
+    if (userInput.length == konamiCode.length) {
+        oIcon = "./sources/orange.webp";
     }
 });
