@@ -1,7 +1,7 @@
 const elFake = document.createElement("div");
 const elGameOver = document.getElementById("Gameover-screen") ?? elFake;
 const elBG = document.getElementById("grid-container") ?? elFake;
-const xIcon = "./sources/X.svg";
+let xIcon = "./sources/X.svg";
 let oIcon = "./sources/O.svg";
 let getSquare = undefined;
 
@@ -308,5 +308,6 @@ document.addEventListener("keydown", (event) => {
     if (userInput.length == konamiCode.length) {
         console.log("Konami Code entered successfully! Enjoy")
         oIcon = "./sources/orange.webp";
+        xIcon = "./sources/cucumber.webp";
     }
 });
