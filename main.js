@@ -71,7 +71,7 @@ function initGrid(size) {
             }
             grid[row][col].addEventListener("click", function () {
                 //add the logic to the square
-                if (!state[row][col] !== 0 || !gameover) {         
+                if (!state[row][col] !== 0 && !gameover) {         
                     //set the selected square and if on let the alg. make a move
                     setSquare(row, col);
                     if (!gameover && aiEnabled) {
