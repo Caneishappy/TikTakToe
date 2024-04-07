@@ -17,7 +17,6 @@ let state = [
     // [-1, -1, 1],
     // [1, 0, 0]
 ];
-console.log("Hello there, hopy you are having a nice day :)")
 function enableAi() {
     aiEnabled ? console.log("Ai is not off") : console.log("Ai is now on.");
     aiEnabled = !aiEnabled;
