@@ -255,7 +255,7 @@ function minimax(state, maxplayer, depth, serchedpositions) {
 }
 
 function getCondition(state = Array) {
-    let lengthToWin = 3; //might change later on, so it is an own variable
+    let lengthToWin = boardsize; //might change later on, so it is an own variable
     for (let i = 0; i <= 1; i++) {
         // Twice for switching row and col
         for (let k = 0; k < state.length; k++) {
