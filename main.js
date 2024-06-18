@@ -17,6 +17,7 @@ let state = [
     // [-1, -1, 1],
     // [1, 0, 0]
 ];
+
 function enableAi() {
     aiEnabled ? console.log("Ai is not off") : console.log("Ai is now on.");
     aiEnabled = !aiEnabled;
@@ -24,7 +25,7 @@ function enableAi() {
         ? (document.getElementById("aionoff").innerText = "AI On")
         : (document.getElementById("aionoff").innerText = "AI Off");
 }
-function setDificulty(input) {
+function setDificulty(input) { //ugly as hell
     if (input == 3) {
         depth = -1;
     } else if (input == 2) {
@@ -122,20 +123,20 @@ function checkGameOver() {
         gameover = true;
         if (condition === 0) {
             elGameOver.innerHTML = `<p>Gameover!  <br><span style="font-weight:bold;font-size: 2.5rem;">Draw</span></p>`;
-            console.log("Game over! Draw");
+            // console.log("Game over! Draw");
             elGameOver.style.display = "block";
             elBG.style.background = "#ff6500";
         } else {
-            console.log("Game over!");
+            // console.log("Game over!");
             elGameOver.style.display = "block";
             elBG.style.background = "red";
             if (condition == 1) {
                 // If X won:
-                console.log("X won!");
+                // console.log("X won!");
                 elGameOver.innerHTML = `<p>Gameover! <br> <span style="font-weight:bold;">Winner:</span></p><img src="${xIcon}" style='width: 30%'>`;
             } else {
                 // O won:
-                console.log("O won!");
+                // console.log("O won!");
                 elGameOver.innerHTML = `<p>Gameover! <br> <span style="font-weight:bold;">Winner:</span></p><img src="${oIcon}" style='width: 30%'>`;
             }
         }
@@ -183,10 +184,19 @@ function getSymmetries(matrix) {
 }
 
 //                          TO DO
-//maby use iterativ deepening? But I don't think it is worth it
-function minimax(state, maxplayer, depth, serchedpositions) {
-    //maxplayer is boolean
-    //recursive
+//maby use iterativ deepening? But I don't think it is worth it.
+//
+function minimax(
+    state,
+    maxplayer,
+    depth,
+    serchedpositions,
+    alpha = -1,
+    beta = 1
+) {
+    // maxplayer is boolean
+    // recursive
+
     for (symmetrie of getSymmetries(state)) {
         const valueofserchedpos = serchedpositions.get(
             JSON.stringify(symmetrie)
@@ -214,14 +224,17 @@ function minimax(state, maxplayer, depth, serchedpositions) {
                     newState,
                     false,
                     depth - 1,
-                    serchedpositions
+                    serchedpositions,
+                    alpha,
+                    beta
                 );
                 serchedpositions.set(JSON.stringify(newState), newValue);
                 if (newValue > value) {
+                    alpha = newValue;
                     //Getting the best value. -1 Means O won; 0 mean draw; 1 means X won.
                     valueAction = action;
                     value = newValue;
-                    if (value >= 1) {
+                    if (beta <= alpha) {
                         //If a winning move is found, stop searching
                         break;
                     }
@@ -237,13 +250,17 @@ function minimax(state, maxplayer, depth, serchedpositions) {
                     newState,
                     true,
                     depth - 1,
-                    serchedpositions
+                    serchedpositions,
+                    alpha,
+                    beta
                 );
                 serchedpositions.set(JSON.stringify(newState), newValue);
                 if (newValue < value) {
+                    beta = newValue;
                     value = newValue;
                     valueAction = action;
-                    if (value <= -1) {
+                    if (beta <= alpha) {
+                        //If a winning move is found, stop searching
                         break;
                     }
                 }
@@ -303,9 +320,10 @@ function playAIGames(
     numGames,
     delayBetweenMoves = 10,
     delayBetweenGames = 1000,
-    perfektplayer = false,
+    perfektplayer = "none",
     innerdepth = depth
 ) {
+    const sotredepth = innerdepth;
     xwins = 0;
     owins = 0;
     function playGame() {
@@ -318,17 +336,18 @@ function playAIGames(
                     if (getPlayer(state) == 1) {
                         innerdepth = -1;
                     } else {
-                        innerdepth = depth;
+                        innerdepth = sotredepth;
                     }
                 } else if (perfektplayer == "o") {
                     if (getPlayer(state) == -1) {
                         innerdepth = -1;
                     } else {
-                        innerdepth = depth;
+                        innerdepth = sotredepth;
                     }
                 }
-
-                doAiMove(state, innerdepth);
+                try {
+                    setSquare(...aiMove(state, innerdepth));
+                } catch {}
                 playGame(); // play recursively
             }, delayBetweenMoves);
         } else {
@@ -369,13 +388,13 @@ function playrandom(state, oneplayer) {
         return condit;
     }
 }
-function getStaticEvalulation(state, oneplayer) {
-    const randomgames = 10; // how many games shoud be played randomly (more is a better evalulation)
+function getStaticEvalulation(state, oneplayer, randomgames = 10) {
+    // const randomgames = 10; // how many games shoud be played randomly (more is a better evalulation)
     let rangamValue = 0;
     for (let i = 0; i < randomgames; i++) {
         rangamValue += playrandom(state, oneplayer);
     }
-    return (rangamValue / randomgames) * 0.9; // return the average of the games and multipy it with a number < 1 so the returned value won't reach 1 or -1
+    return (rangamValue / randomgames) * 0.999; // return the average of the games and multipy it with a number < 1 so the returned value won't reach 1 or -1
 }
 
 function getPlayer(state) {

@@ -33,6 +33,7 @@ h1,
     background-color: #2196f3;
     padding: 10px;
     justify-content: center;
+    transition: 0.2s;
 }
 
 .grid-container > div {
